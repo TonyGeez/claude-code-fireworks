@@ -30,7 +30,7 @@ npm install -g claude-code-fireworks
 
 3. Run ccf once to create the configuration directory:
 ```bash
-ccf
+ccf init
 ```
 
 This will create `~/.claude-code-fireworks/` with:
@@ -51,8 +51,14 @@ notepad %USERPROFILE%\.claude-code-fireworks\.env
 
 1. Start the proxy:
 ```bash
-ccf
+ccf start
 ```
+If you need to change model, you can change it easily*:
+```bash
+ccf model
+```
+
+*You will need to stop the proxy and start it again with `ccf start`
 
 2. In another terminal session, start Claude Code with proxy settings:
 ```bash
