@@ -1,10 +1,10 @@
 {
   "name": "claude-code-fireworks",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "type": "module",
   "description": "A lightweight proxy that allows Claude Code to use the Fireworks.ai API without the 5K token streaming limitation.",
   "bin": {
-    "ccf": "./dist/index.js"
+    "ccf": "./dist/cli.js"
   },
   "main": "dist/index.js",
   "files": [
@@ -43,7 +43,8 @@
   },
   "dependencies": {
     "chalk": "^5.6.2",
-    "dotenv": "^17.2.3"
+    "dotenv": "^17.2.3",
+    "@inquirer/prompts": "^7.2.0"
   },
   "devDependencies": {
     "@types/node": "^24.9.0",

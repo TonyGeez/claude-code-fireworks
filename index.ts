@@ -12,38 +12,12 @@ const ENV_FILE = path.join(HOME_DIR, '.env');
 const REPLACE_DIR = path.join(HOME_DIR, 'replace');
 const LOGS_DIR = path.join(HOME_DIR, 'logs');
 
-// Create home directory structure if it doesn't exist
-function ensureHomeDirectoryStructure() {
-  if (!fs.existsSync(HOME_DIR)) {
-    fs.mkdirSync(HOME_DIR, { recursive: true });
-    console.log(chalk.green(`✓ Created configuration directory: ${HOME_DIR}`));
-  }
-  
-  if (!fs.existsSync(REPLACE_DIR)) {
-    fs.mkdirSync(REPLACE_DIR, { recursive: true });
-    console.log(chalk.green(`✓ Created replace directory: ${REPLACE_DIR}`));
-  }
-  
-  if (!fs.existsSync(LOGS_DIR)) {
-    fs.mkdirSync(LOGS_DIR, { recursive: true });
-    console.log(chalk.green(`✓ Created logs directory: ${LOGS_DIR}`));
-  }
-  
-  if (!fs.existsSync(ENV_FILE)) {
-    const defaultEnv = `LISTEN_HOST=127.0.0.1
-LISTEN_PORT=3000
-
-FIREWORKS_BASE=https://api.fireworks.ai/inference/v1
-FIREWORKS_API_KEY=your_api_key_here
-FIREWORKS_MODEL=accounts/fireworks/models/glm-4p5
-`;
-    fs.writeFileSync(ENV_FILE, defaultEnv);
-    console.log(chalk.yellow(`✓ Created default .env file: ${ENV_FILE}`));
-    console.log(chalk.yellow(`  Please edit this file and add your FIREWORKS_API_KEY`));
-  }
+// Check if initialized
+if (!fs.existsSync(HOME_DIR) || !fs.existsSync(ENV_FILE)) {
+  console.error(chalk.red('\n✗ Configuration not found!'));
+  console.error(chalk.yellow('  Please run: ccf init\n'));
+  process.exit(1);
 }
-
-ensureHomeDirectoryStructure();
 
 // Load environment variables from home directory
 dotenv.config({ path: ENV_FILE });
