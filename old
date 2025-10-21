@@ -16,33 +16,12 @@ A lightweight proxy to use Fireworks.ai with Claude Code without the 5K token st
 
 ## Installation
 
-### Quick Install (Recommended)
-
-1. Install Claude-code if it not installed yet:
+1. Install Claude-code if it not installed yet, otherwise, continue to `step 2`
 ```bash
 npm install -g @anthropic-ai/claude-code
 ```
-
-2. Install claude-code-fireworks globally:
-```bash
-npm install -g claude-code-fireworks
-```
-
-3. Create a `.env` file in your working directory:
-```env
-LISTEN_HOST=127.0.0.1
-LISTEN_PORT=3000
-
-FIREWORKS_BASE=https://api.fireworks.ai/inference/v1
-FIREWORKS_API_KEY=your_api_key_here
-FIREWORKS_MODEL=accounts/fireworks/models/glm-4p5
-```
-
-### For Contributors
-
-If you want to contribute to the project:
-
-1. Clone the repository:
+   
+3. Clone the repository:
 ```bash
 git clone https://github.com/TonyGeez/claude-code-fireworks.git
 cd claude-code-fireworks
@@ -63,42 +42,19 @@ FIREWORKS_API_KEY=your_api_key_here
 FIREWORKS_MODEL=accounts/fireworks/models/glm-4p5
 ```
 
-4. Build the project:
-```bash
-npm run build
-```
-
 ## Usage
 
-### Using npm package (Quick Install)
+### Build
 
-1. Start the proxy:
-```bash
-ccf
-```
-
-2. In another terminal session, start Claude Code with proxy settings:
-```bash
-export ANTHROPIC_BASE_URL=http://127.0.0.1:3000
-export ANTHROPIC_AUTH_TOKEN=ANYTHING #Doesn't matter but must be set to something/whatever
-export API_TIMEOUT_MS=600000
-
-claude #Finally, run claude-code to start it
-```
-
-### For Contributors (Development)
-
-1. Start the proxy in development mode:
-```bash
-npm run dev
-```
-Or build and start:
 ```bash
 npm run build
+```
+### Start proxy 
+```bash
 npm run start
 ```
 
-2. In another terminal session, start Claude Code with proxy settings:
+### Start Claude Code (In another session or use pm2) 
 ```bash
 export ANTHROPIC_BASE_URL=http://127.0.0.1:3000
 export ANTHROPIC_AUTH_TOKEN=ANYTHING #Doesn't matter but must be set to something/whatever
@@ -138,6 +94,7 @@ You must log output and input from logs to use the exact message. Here an exampl
 }
 ```
 
+
 ## Logging
 
 All requests and responses are logged to the `logs/` directory with timestamps. Logs are automatically truncated for readability (configurable in code).
@@ -154,12 +111,3 @@ Token usage is included in both streaming and non-streaming responses.
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## License
-
-MIT

@@ -3,9 +3,50 @@ import { createServer } from "http";
 import * as dotenv from 'dotenv';
 import * as fs from 'fs';
 import * as path from 'path';
+import * as os from 'os';
 import chalk from 'chalk';
 
-dotenv.config();
+// ---------- HOME DIRECTORY SETUP ----------
+const HOME_DIR = path.join(os.homedir(), '.claude-code-fireworks');
+const ENV_FILE = path.join(HOME_DIR, '.env');
+const REPLACE_DIR = path.join(HOME_DIR, 'replace');
+const LOGS_DIR = path.join(HOME_DIR, 'logs');
+
+// Create home directory structure if it doesn't exist
+function ensureHomeDirectoryStructure() {
+  if (!fs.existsSync(HOME_DIR)) {
+    fs.mkdirSync(HOME_DIR, { recursive: true });
+    console.log(chalk.green(`✓ Created configuration directory: ${HOME_DIR}`));
+  }
+  
+  if (!fs.existsSync(REPLACE_DIR)) {
+    fs.mkdirSync(REPLACE_DIR, { recursive: true });
+    console.log(chalk.green(`✓ Created replace directory: ${REPLACE_DIR}`));
+  }
+  
+  if (!fs.existsSync(LOGS_DIR)) {
+    fs.mkdirSync(LOGS_DIR, { recursive: true });
+    console.log(chalk.green(`✓ Created logs directory: ${LOGS_DIR}`));
+  }
+  
+  if (!fs.existsSync(ENV_FILE)) {
+    const defaultEnv = `LISTEN_HOST=127.0.0.1
+LISTEN_PORT=3000
+
+FIREWORKS_BASE=https://api.fireworks.ai/inference/v1
+FIREWORKS_API_KEY=your_api_key_here
+FIREWORKS_MODEL=accounts/fireworks/models/glm-4p5
+`;
+    fs.writeFileSync(ENV_FILE, defaultEnv);
+    console.log(chalk.yellow(`✓ Created default .env file: ${ENV_FILE}`));
+    console.log(chalk.yellow(`  Please edit this file and add your FIREWORKS_API_KEY`));
+  }
+}
+
+ensureHomeDirectoryStructure();
+
+// Load environment variables from home directory
+dotenv.config({ path: ENV_FILE });
 
 // ---------- CONFIG ----------
 const LISTEN_HOST = process.env.LISTEN_HOST || "127.0.0.1";
@@ -14,13 +55,13 @@ const FIREWORKS_BASE = process.env.FIREWORKS_BASE || "https://api.fireworks.ai/i
 const FIREWORKS_API_KEY = process.env.FIREWORKS_API_KEY;
 const FIREWORKS_MODEL = process.env.FIREWORKS_MODEL;
 
-if (!FIREWORKS_API_KEY) {
-  console.error("You need to set FIREWORKS_API_KEY in .env");
+if (!FIREWORKS_API_KEY || FIREWORKS_API_KEY === 'your_api_key_here') {
+  console.error(chalk.red(`\n✗ You need to set FIREWORKS_API_KEY in ${ENV_FILE}`));
   process.exit(1);
 }
 
 if (!FIREWORKS_MODEL) {
-  console.error("You need to set FIREWORKS_MODEL in .env");
+  console.error(chalk.red(`\n✗ You need to set FIREWORKS_MODEL in ${ENV_FILE}`));
   process.exit(1);
 }
 
@@ -31,21 +72,20 @@ interface MessageReplacement {
 }
 
 function loadReplacements(): MessageReplacement[] {
-  const replaceDir = path.join(process.cwd(), 'replace');
   const replacements: MessageReplacement[] = [];
   
-  if (!fs.existsSync(replaceDir)) {
+  if (!fs.existsSync(REPLACE_DIR)) {
     log("No replace/ directory found, skipping replacements");
     return replacements;
   }
 
   try {
-    const files = fs.readdirSync(replaceDir);
+    const files = fs.readdirSync(REPLACE_DIR);
     
     for (const file of files) {
       if (file.endsWith('.json')) {
         try {
-          const filePath = path.join(replaceDir, file);
+          const filePath = path.join(REPLACE_DIR, file);
           const content = fs.readFileSync(filePath, 'utf8');
           const replacement = JSON.parse(content) as MessageReplacement;
           
@@ -72,14 +112,8 @@ const log = (...args: any[]) => console.error(chalk.green.bold(`\n◉`), ...args
 
 // ---------- LOG TO FILE ----------
 const timestamp = Date.now();
-const logFileDir: string = path.join(process.cwd(), 'logs');
 const logFileName = `${timestamp}.txt`;
-const logFile = path.join(logFileDir, logFileName);
-
-// Ensure log directory exists
-if (!fs.existsSync(logFileDir)) {
-  fs.mkdirSync(logFileDir, { recursive: true });
-}
+const logFile = path.join(LOGS_DIR, logFileName);
 
 const logToFile = (...args: any[]) => {
   const formattedArgs = args
@@ -717,9 +751,15 @@ const server = createServer(async (req, res) => {
 
 // ---------- STARTUP ----------
 server.listen(LISTEN_PORT, LISTEN_HOST, () => {
-log(chalk.green('Listening on'), chalk.green.bold(`http://${LISTEN_HOST}:${LISTEN_PORT}`));
-  log(chalk.cyan.bold('Fireworks model\n'), chalk.cyan(` ${FIREWORKS_MODEL}`));
+  console.log('\n' + chalk.cyan.bold('━'.repeat(60)));
+  console.log(chalk.cyan.bold('  Claude Code Fireworks Proxy'));
+  console.log(chalk.cyan.bold('━'.repeat(60)));
+  console.log(chalk.green('  ✓ Server listening on'), chalk.green.bold(`http://${LISTEN_HOST}:${LISTEN_PORT}`));
+  console.log(chalk.cyan('  ✓ Fireworks model:'), chalk.cyan.bold(FIREWORKS_MODEL));
+  console.log(chalk.yellow('  ✓ Config directory:'), chalk.yellow(HOME_DIR));
+  console.log(chalk.yellow('  ✓ Logs directory:'), chalk.yellow(LOGS_DIR));
   if (replacements.length > 0) {
-    log(chalk.cyan('Loaded'), chalk.cyan.bold(`${replacements.length}`), chalk.cyan('prompt replacement(s)'));
+    console.log(chalk.magenta('  ✓ Loaded'), chalk.magenta.bold(`${replacements.length}`), chalk.magenta('prompt replacement(s)'));
   }
+  console.log(chalk.cyan.bold('━'.repeat(60) + '\n'));
 });
