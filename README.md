@@ -16,7 +16,12 @@ A lightweight proxy server that converts Anthropic API requests to Fireworks.ai 
 
 ## Installation
 
-1. Clone the repository:
+1. Install Claude-code if it not installed yet, otherwise, continue to `step 2`
+```bash
+npm install -g @anthropic-ai/claude-code
+```
+   
+3. Clone the repository:
 ```bash
 git clone https://github.com/TonyGeez/claude-code-fireworks.git
 cd claude-code-fireworks
@@ -52,9 +57,10 @@ npm run start
 ### Start Claude Code (In another session or use pm2) 
 ```bash
 export ANTHROPIC_BASE_URL=http://127.0.0.1:3000
-export ANTHROPIC_AUTH_TOKEN=ANYTHING #DOESN'T MATTER BUT MUST BE SET
+export ANTHROPIC_AUTH_TOKEN=ANYTHING #Doesn't matter but must be set to something/whatever
 export API_TIMEOUT_MS=600000
-claude
+
+claude #Finally, run claude-code to start it
 ```
 
 ## Configuration
