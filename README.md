@@ -23,54 +23,31 @@ A lightweight proxy to use Fireworks.ai with Claude Code without the 5K token st
 npm install -g @anthropic-ai/claude-code
 ```
 
-2. Install claude-code-fireworks globally:
+2. Install claude-code-fireworks:
 ```bash
 npm install -g claude-code-fireworks
 ```
 
-3. Create a `.env` file in your working directory:
-```env
-LISTEN_HOST=127.0.0.1
-LISTEN_PORT=3000
-
-FIREWORKS_BASE=https://api.fireworks.ai/inference/v1
-FIREWORKS_API_KEY=your_api_key_here
-FIREWORKS_MODEL=accounts/fireworks/models/glm-4p5
-```
-
-### For Contributors
-
-If you want to contribute to the project:
-
-1. Clone the repository:
+3. Run ccf once to create the configuration directory:
 ```bash
-git clone https://github.com/TonyGeez/claude-code-fireworks.git
-cd claude-code-fireworks
+ccf
 ```
 
-2. Install dependencies:
+This will create `~/.claude-code-fireworks/` with:
+- `.env` - Configuration file (edit this to add your API key)
+- `replace/` - Directory for prompt replacement JSON files
+- `logs/` - Directory for request/response logs
+
+4. Edit the configuration file and add your Fireworks API key:
 ```bash
-npm install
-```
+# On Linux/Mac
+nano ~/.claude-code-fireworks/.env
 
-3. Create a `.env` file in the root directory:
-```env
-LISTEN_HOST=127.0.0.1
-LISTEN_PORT=3000
-
-FIREWORKS_BASE=https://api.fireworks.ai/inference/v1
-FIREWORKS_API_KEY=your_api_key_here
-FIREWORKS_MODEL=accounts/fireworks/models/glm-4p5
-```
-
-4. Build the project:
-```bash
-npm run build
+# On Windows
+notepad %USERPROFILE%\.claude-code-fireworks\.env
 ```
 
 ## Usage
-
-### Using npm package (Quick Install)
 
 1. Start the proxy:
 ```bash
@@ -80,45 +57,43 @@ ccf
 2. In another terminal session, start Claude Code with proxy settings:
 ```bash
 export ANTHROPIC_BASE_URL=http://127.0.0.1:3000
-export ANTHROPIC_AUTH_TOKEN=ANYTHING #Doesn't matter but must be set to something/whatever
+export ANTHROPIC_AUTH_TOKEN=ANYTHING
 export API_TIMEOUT_MS=600000
 
-claude #Finally, run claude-code to start it
-```
-
-### For Contributors (Development)
-
-1. Start the proxy in development mode:
-```bash
-npm run dev
-```
-Or build and start:
-```bash
-npm run build
-npm run start
-```
-
-2. In another terminal session, start Claude Code with proxy settings:
-```bash
-export ANTHROPIC_BASE_URL=http://127.0.0.1:3000
-export ANTHROPIC_AUTH_TOKEN=ANYTHING #Doesn't matter but must be set to something/whatever
-export API_TIMEOUT_MS=600000
-
-claude #Finally, run claude-code to start it
+claude
 ```
 
 ## Configuration
 
+### Configuration Directory
+
+All configuration files are stored in `~/.claude-code-fireworks/`:
+- **`.env`** - Main configuration file
+- **`replace/`** - Prompt replacement JSON files
+- **`logs/`** - Request/response logs
+
 ### Environment Variables
 
+Edit `~/.claude-code-fireworks/.env` to configure:
+
+```env
+LISTEN_HOST=127.0.0.1
+LISTEN_PORT=3000
+
+FIREWORKS_BASE=https://api.fireworks.ai/inference/v1
+FIREWORKS_API_KEY=your_api_key_here
+FIREWORKS_MODEL=accounts/fireworks/models/glm-4p5
+```
+
 - `FIREWORKS_API_KEY` - Your Fireworks.ai API key (required)
-- `FIREWORKS_MODEL` - The Fireworks model to use (required)
+- `FIREWORKS_MODEL` - The Fireworks model to use (default: accounts/fireworks/models/glm-4p5)
 - `LISTEN_HOST` - Host to bind the server to (default: 127.0.0.1)
 - `LISTEN_PORT` - Port to listen on (default: 3000)
+- `FIREWORKS_BASE` - Fireworks API base URL (default: https://api.fireworks.ai/inference/v1)
 
 ### Message Replacements
 
-You can replace the pre-defined Claude prompt by adding JSON files to the `replace/` directory:
+You can replace the pre-defined Claude prompt by adding JSON files to `~/.claude-code-fireworks/replace/`:
 
 ```json
 {
@@ -127,9 +102,9 @@ You can replace the pre-defined Claude prompt by adding JSON files to the `repla
 }
 ```
 
-The proxy will automatically load all `.json` files from the `replace/` directory on startup and apply exact string matches to message content. 
+The proxy will automatically load all `.json` files from `~/.claude-code-fireworks/replace/` on startup and apply exact string matches to message content. 
 
-You must log output and input from logs to use the exact message. Here an example of replacement of the prompt triggered when execute the /init command in Claude Code:
+You must log output and input from logs to use the exact message. Here an example of replacement of the prompt triggered when execute the /init command in Claude Code (save as `~/.claude-code-fireworks/replace/init-prompt.json`):
 
 ```json
 {
@@ -140,7 +115,7 @@ You must log output and input from logs to use the exact message. Here an exampl
 
 ## Logging
 
-All requests and responses are logged to the `logs/` directory with timestamps. Logs are automatically truncated for readability (configurable in code).
+All requests and responses are logged to `~/.claude-code-fireworks/logs/` with timestamps. Logs are automatically truncated for readability (configurable in code).
 
 ## Token Usage
 
