@@ -3,14 +3,30 @@
   "version": "1.0.0",
   "type": "module",
   "description": "A lightweight proxy that allows Claude Code to use the Fireworks.ai API without the 5K token streaming limitation.",
-  "bin": "dist/index.js",
+  "bin": {
+    "ccf": "./dist/index.js"
+  },
   "main": "dist/index.js",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "claude",
+    "claude-code",
+    "fireworks",
+    "ai",
+    "proxy",
+    "llm"
+  ],
   "scripts": {
     "dev": "tsx watch index.ts",
     "build": "tsc && echo '{\"type\":\"module\"}' > dist/package.json",
     "start": "node dist/index.js",
     "start:ts": "tsx index.ts",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run clean && npm run build"
   },
   "repository": {
     "type": "git",
@@ -22,6 +38,9 @@
     "url": "https://github.com/TonyGeez/claude-code-fireworks/issues"
   },
   "homepage": "https://github.com/TonyGeez/claude-code-fireworks#readme",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "dependencies": {
     "chalk": "^5.6.2",
     "dotenv": "^17.2.3"
