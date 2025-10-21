@@ -1,7 +1,6 @@
-# Claude-code with Fireworks.ai API
-## Without the Fireworks.ai 5K token streaming limitation.
+# Claude Code with Fireworks.ai API
 
-A lightweight proxy server that converts Anthropic API requests to Fireworks.ai and vice versa format, enabling Fireworks.ai use with Claude Code without the 5K token streaming limitation.
+A lightweight proxy to use Fireworks.ai with Claude Code without the 5K token streaming limitation. 
 
 ## Features
 
