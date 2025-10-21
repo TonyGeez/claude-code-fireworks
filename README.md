@@ -52,6 +52,8 @@ npm run start
 ### Start Claude Code (In another session or use pm2) 
 ```bash
 export ANTHROPIC_BASE_URL=http://127.0.0.1:3000
+export ANTHROPIC_AUTH_TOKEN=ANYTHING #DOESN'T MATTER BUT MUST BE SET
+export API_TIMEOUT_MS=600000
 claude
 ```
 
