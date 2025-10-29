@@ -26,9 +26,18 @@ const DEFAULT_MODELS = [
   "accounts/fireworks/models/kimi-k2-instruct-0905",
   "accounts/fireworks/models/llama-v3p1-405b-instruct",
   "accounts/fireworks/models/qwen3-235b-a22b-instruct-2507",
-  "accounts/fireworks/models/qwen3-235b-a22b-thinking-2507"
-];
+  "accounts/fireworks/models/qwen3-235b-a22b-thinking-2507",
 
+  "accounts/fireworks/models/gpt-oss-120b",
+  "accounts/fireworks/models/qwen3-vl-30b-a3b-instruct",
+  "accounts/fireworks/models/qwen3-vl-30b-a3b-thinking",
+  "accounts/fireworks/models/qwen3-vl-235b-a22b-instruct",
+  "accounts/fireworks/models/qwen2p5-vl-32b-instruct",
+  "accounts/fireworks/models/qwen3-235b-a22b",
+  "accounts/fireworks/models/minimax-m2",
+  "accounts/fireworks/models/glm-4p6",
+  "accounts/deepseek-ai/models/deepseek-v3p1",
+];
 function checkInitialized(): boolean {
   return fs.existsSync(HOME_DIR) && fs.existsSync(ENV_FILE);
 }
@@ -83,6 +92,12 @@ LISTEN_PORT=3000
 FIREWORKS_BASE=https://api.fireworks.ai/inference/v1
 FIREWORKS_API_KEY=your_api_key_here
 FIREWORKS_MODEL=${DEFAULT_MODELS[0]}
+
+MODEL_TEMPERATURE=0.3
+MODEL_TOP_P=1
+MODEL_TOP_K=
+MODEL_FREQUENCY_PENALTY=0
+MODEL_PRESENCE_PENALTY=0
 `;
     fs.writeFileSync(ENV_FILE, defaultEnv);
     console.log(chalk.green(`✓ Created default .env file: ${ENV_FILE}`));
