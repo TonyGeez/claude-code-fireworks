@@ -29,12 +29,12 @@ const FIREWORKS_BASE =
   process.env.FIREWORKS_BASE || "https://api.fireworks.ai/inference/v1";
 const FIREWORKS_API_KEY = process.env.FIREWORKS_API_KEY;
 const FIREWORKS_MODEL = process.env.FIREWORKS_MODEL;
-const MODEL_TOP_P = process.env.MODEL_TOP_P;
-const MODEL_TOP_K = process.env.MODEL_TOP_K;
-const MODEL_FREQUENCY_PENALTY = process.env.MODEL_FREQUENCY_PENALTY;
-const MODEL_PRESENCE_PENALTY = process.env.MODEL_PRESENCE_PENALTY;
-const MODEL_TEMPERATURE = process.env.MODEL_TEMPERATURE;
-const MODEL_MAX_TOKENS = process.env.MODEL_MAX_TOKENS;
+const MODEL_TOP_P = process.env.MODEL_TOP_P ? parseFloat(process.env.MODEL_TOP_P) : undefined;
+const MODEL_TOP_K = process.env.MODEL_TOP_K ? parseInt(process.env.MODEL_TOP_K, 10) : undefined;
+const MODEL_FREQUENCY_PENALTY = process.env.MODEL_FREQUENCY_PENALTY ? parseFloat(process.env.MODEL_FREQUENCY_PENALTY) : undefined;
+const MODEL_PRESENCE_PENALTY = process.env.MODEL_PRESENCE_PENALTY ? parseFloat(process.env.MODEL_PRESENCE_PENALTY) : undefined;
+const MODEL_TEMPERATURE = process.env.MODEL_TEMPERATURE ? parseFloat(process.env.MODEL_TEMPERATURE) : undefined;
+const MODEL_MAX_TOKENS = process.env.MODEL_MAX_TOKENS ? parseInt(process.env.MODEL_MAX_TOKENS, 10) : undefined;
 
 if (!FIREWORKS_API_KEY || FIREWORKS_API_KEY === "your_api_key_here") {
   console.error(
@@ -396,7 +396,7 @@ function anthropicToFireworks(req: AnthropicRequest): FireworksRequest {
     max_tokens: MODEL_MAX_TOKENS ?? req.max_tokens,
     temperature: MODEL_TEMPERATURE ?? req.temperature,
     top_p: MODEL_TOP_P ?? 1,
-    top_k: MODEL_TOP_K ?? null,
+    top_k: MODEL_TOP_K ?? undefined,
     frequency_penalty: MODEL_FREQUENCY_PENALTY ?? 0,
     presence_penalty: MODEL_PRESENCE_PENALTY ?? 0,
     stream: true,
