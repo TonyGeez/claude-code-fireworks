@@ -29,6 +29,12 @@ const FIREWORKS_BASE =
   process.env.FIREWORKS_BASE || "https://api.fireworks.ai/inference/v1";
 const FIREWORKS_API_KEY = process.env.FIREWORKS_API_KEY;
 const FIREWORKS_MODEL = process.env.FIREWORKS_MODEL;
+const MODEL_TOP_P = process.env.MODEL_TOP_P;
+const MODEL_TOP_K = process.env.MODEL_TOP_K;
+const MODEL_FREQUENCY_PENALTY = process.env.MODEL_FREQUENCY_PENALTY;
+const MODEL_PRESENCE_PENALTY = process.env.MODEL_PRESENCE_PENALTY;
+const MODEL_TEMPERATURE = process.env.MODEL_TEMPERATURE;
+const MODEL_MAX_TOKENS = process.env.MODEL_MAX_TOKENS;
 
 if (!FIREWORKS_API_KEY || FIREWORKS_API_KEY === "your_api_key_here") {
   console.error(
